@@ -1,29 +1,36 @@
 import React, { Component } from "react";
 import Menu from "./MenuComponent";
 import DishDetail from "./dishDetailComponent";
-import { DISHES } from "../shared/dishes";
-import { View } from "react-native";
+import Home from "./HomeComponent";
+import ContactUs from "./ContactComponent";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import AboutUs from "./AboutComponent";
+
+const Stack = createStackNavigator();
+
+const SubMain = () => {
+  return (
+    <Stack.Navigator initialRouteName='Menu'>
+      <Stack.Screen name='Menu' component={Menu} />
+      <Stack.Screen name='DishDetail' component={DishDetail} />
+    </Stack.Navigator>
+  );
+};
 
 class Main extends Component {
-  state = { dishes: DISHES, selectedDish: null };
-  onSelect = (dishID) => {
-    this.setState({ selectedDish: dishID });
-  };
   render() {
+    const Drawer = createDrawerNavigator();
     return (
-      <View>
-        <Menu
-          dishes={this.state.dishes}
-          onPress={(dishId) => this.onSelect(dishId)}
-        />
-        <DishDetail
-          dish={
-            this.state.dishes.filter(
-              (item) => item.id === this.state.selectedDish
-            )[0]
-          }
-        />
-      </View>
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName='Home'>
+          <Drawer.Screen name='Home' component={Home} />
+          <Drawer.Screen name='About Us' component={AboutUs} />
+          <Drawer.Screen name='Menu' component={SubMain} />
+          <Drawer.Screen name='Contact Us' component={ContactUs} />
+        </Drawer.Navigator>
+      </NavigationContainer>
     );
   }
 }

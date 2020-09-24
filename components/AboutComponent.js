@@ -1,8 +1,15 @@
 import React, { Component } from "react";
 import { Text, FlatList, ScrollView, View } from "react-native";
-import { Card, ListItem } from "react-native-elements";
+import { Card, ListItem, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
-import { LEADERS } from "./../shared/leaders";
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+
+const mapStateToProps = (state) => {
+  return {
+    leaders: state.leaders,
+  };
+};
 
 const renderLeaderItem = ({ item, index }) => {
   return (
@@ -11,15 +18,15 @@ const renderLeaderItem = ({ item, index }) => {
       title={item.name}
       subtitle={item.description}
       hideChevron={true}
-      leftAvatar={{ source: require("./images/alberto.png") }}
+      leftAvatar={{ source: { uri: baseUrl + item.image } }}
     />
   );
 };
 
 class SubAboutUs extends Component {
-  state = { leaders: LEADERS };
   render() {
-    if (this.state.leaders !== 0)
+    console.log(this.props);
+    if (this.props.leaders.leaders !== 0)
       return (
         <ScrollView>
           <Card title={"Our History"}>
@@ -30,7 +37,7 @@ class SubAboutUs extends Component {
 
           <Card title={"Corporate Leadership"}>
             <FlatList
-              data={this.state.leaders}
+              data={this.props.leaders.leaders}
               renderItem={renderLeaderItem}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -44,10 +51,29 @@ class SubAboutUs extends Component {
 const AboutUs = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name='About Us' component={SubAboutUs} />
+    <Stack.Navigator
+      initialRouteName='Home'
+      screenOptions={{
+        headerStyle: { backgroundColor: "#BAE2EE" },
+      }}
+    >
+      <Stack.Screen
+        name='About Us'
+        options={({ navigation }) => ({
+          headerLeft: (props) => (
+            <Icon
+              name='menu'
+              size={24}
+              color='#145F74'
+              onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+        })}
+      >
+        {(props) => <SubAboutUs {...props} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };
 
-export default AboutUs;
+export default connect(mapStateToProps)(AboutUs);

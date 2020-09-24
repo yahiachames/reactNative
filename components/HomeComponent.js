@@ -1,46 +1,62 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
-import { DISHES } from "./../shared/dishes";
-import { COMMENTS } from "./../shared/comments";
-import { LEADERS } from "./../shared/leaders";
-import { PROMOTIONS } from "./../shared/promotions";
+
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+
+const mapStateToProps = (state) => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders,
+  };
+};
 
 const RenderItem = (props) => {
   const item = props.item;
+  console.log(JSON.stringify(item.name) + "from render item");
 
-  if (item !== null)
+  if (item.isLoading) return <View />;
+  if (props.errMss) return <View />;
+  else
     return (
       <Card
-        featuredTitle={item.name}
-        featuredSubtitle={item.designation}
-        image={require("./images/uthappizza.png")}
+        featuredTitle={JSON.stringify(item.name)}
+        featuredSubtitle={JSON.stringify(item.designation)}
+        image={{ uri: baseUrl + item.image }}
       >
         <Text style={{ margin: 10 }}>{item.description}</Text>
       </Card>
     );
-  else return <View></View>;
 };
 
 class SubHome extends Component {
-  state = {
-    dishes: DISHES,
-    comments: COMMENTS,
-    leaders: LEADERS,
-    promotions: PROMOTIONS,
-  };
   render() {
     return (
       <ScrollView>
         <RenderItem
-          item={this.state.dishes.filter((dish) => dish.featured)[0]}
+          item={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+          isLoading={this.props.dishes.isLoading}
+          erreMess={this.props.dishes.erreMess}
         />
         <RenderItem
-          item={this.state.leaders.filter((leader) => leader.featured)[0]}
+          item={
+            this.props.promotions.promotions.filter(
+              (promo) => promo.featured
+            )[0]
+          }
+          isLoading={this.props.promotions.isLoading}
+          erreMess={this.props.promotions.erreMess}
         />
         <RenderItem
-          item={this.state.promotions.filter((promo) => promo.featured)[0]}
+          item={
+            this.props.leaders.leaders.filter((leader) => leader.featured)[0]
+          }
+          isLoading={this.props.leaders.isLoading}
+          erreMess={this.props.leaders.erreMess}
         />
       </ScrollView>
     );
@@ -54,10 +70,24 @@ class Home extends Component {
 
     return (
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={SubHome} />
+        <Stack.Screen
+          name='Home'
+          options={({ navigation }) => ({
+            headerLeft: (props) => (
+              <Icon
+                name='menu'
+                size={24}
+                color='#145F74'
+                onPress={() => navigation.toggleDrawer()}
+              />
+            ),
+          })}
+        >
+          {(props) => <SubHome {...props} data={this.props} />}
+        </Stack.Screen>
       </Stack.Navigator>
     );
   }
 }
 
-export default Home;
+export default connect(mapStateToProps)(SubHome);

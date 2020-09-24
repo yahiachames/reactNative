@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 
 const SubContactUs = () => {
@@ -20,7 +20,20 @@ const ContactUs = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name='Contact Us' component={SubContactUs} />
+      <Stack.Screen
+        name='Contact Us'
+        component={SubContactUs}
+        options={({ navigation }) => ({
+          headerLeft: (props) => (
+            <Icon
+              name='menu'
+              size={24}
+              color='#145F74'
+              onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useLayoutEffect, useState } from "react";
 import Menu from "./MenuComponent";
 import DishDetail from "./dishDetailComponent";
 import Home from "./HomeComponent";
@@ -21,15 +21,15 @@ import {
   fetchComments,
   fetchPromos,
   fetchLeaders,
-  PromiseAllFetch,
+  executeAllFetches,
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
-    dishes: state.dishes,
-    comments: state.comments,
     promotions: state.promotions,
+    dishes: state.dishes,
     leaders: state.leaders,
+    comments: state.comments,
   };
 };
 
@@ -62,12 +62,11 @@ const CustomDrawerContentComponent = (props) => {
   );
 };
 
-const SubMain = () => {
+const SubMenu = (props) => {
   return (
     <Stack.Navigator initialRouteName='Menu'>
       <Stack.Screen
         name='Menu'
-        component={Menu}
         options={({ navigation }) => ({
           headerLeft: (props) => (
             <Icon
@@ -78,7 +77,9 @@ const SubMain = () => {
             />
           ),
         })}
-      />
+      >
+        {(props) => <Menu {...props} />}
+      </Stack.Screen>
       <Stack.Screen name='DishDetail' component={DishDetail} />
     </Stack.Navigator>
   );
@@ -119,7 +120,7 @@ class MainNavigator extends Component {
 
           <Drawer.Screen
             name='Menu'
-            component={SubMain}
+            component={SubMenu}
             options={{
               drawerIcon: () => (
                 <Icon name='list' type='font-awesome' color='#145F74' />
@@ -141,19 +142,22 @@ class MainNavigator extends Component {
   }
 }
 
-const Main = (props) => {
-  useEffect(() => {
-    props.fetchDishes();
-    props.fetchComments();
-    props.fetchPromos();
-    props.fetchLeaders();
-  }, []);
-  return (
-    <SafeAreaProvider>
-      <MainNavigator />
-    </SafeAreaProvider>
-  );
-};
+class Main extends Component {
+  state = {};
+  componentDidMount() {
+    this.props.fetchComments();
+    this.props.fetchDishes();
+    this.props.fetchLeaders();
+    this.props.fetchPromos();
+  }
+  render() {
+    return (
+      <SafeAreaProvider>
+        <MainNavigator />
+      </SafeAreaProvider>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

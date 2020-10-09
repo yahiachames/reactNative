@@ -13,13 +13,12 @@ const mapStateToProps = (state) => {
 };
 
 class Menu extends Component {
-  state = { dishes: DISHES };
   static navigationOptions = {
     title: "Menu",
   };
-
   render() {
-    const { navigation } = this.props;
+    console.log(JSON.stringify(this.props) + "from menu");
+    const { navigate } = this.props.navigation;
     const renderMenuItem = ({ item, index }) => {
       return (
         <Tile
@@ -27,7 +26,7 @@ class Menu extends Component {
           title={item.name}
           caption={item.description}
           featured
-          onPress={() => navigate("Dishdetail", { dishId: item.id })}
+          onPress={() => navigate("DishDetail", { dishId: item.id })}
           imageSrc={{ uri: baseUrl + item.image }}
         />
       );
@@ -43,4 +42,4 @@ class Menu extends Component {
   }
 }
 
-export default Menu;
+export default connect(mapStateToProps)(Menu);

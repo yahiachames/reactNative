@@ -25,8 +25,8 @@ const renderLeaderItem = ({ item, index }) => {
 
 class SubAboutUs extends Component {
   render() {
-    console.log(this.props);
-    if (this.props.leaders.leaders !== 0)
+    console.log(this.props.data);
+    if (this.props.data.leaders.leaders !== 0)
       return (
         <ScrollView>
           <Card title={"Our History"}>
@@ -37,7 +37,7 @@ class SubAboutUs extends Component {
 
           <Card title={"Corporate Leadership"}>
             <FlatList
-              data={this.props.leaders.leaders}
+              data={this.props.data.leaders.leaders}
               renderItem={renderLeaderItem}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -48,7 +48,8 @@ class SubAboutUs extends Component {
   }
 }
 
-const AboutUs = () => {
+const AboutUs = (props) => {
+  const data = props;
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
@@ -70,7 +71,7 @@ const AboutUs = () => {
           ),
         })}
       >
-        {(props) => <SubAboutUs {...props} />}
+        {(props) => <SubAboutUs {...props} data={data} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

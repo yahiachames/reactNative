@@ -62,21 +62,21 @@ const RenderComments = (props) => {
 
 class DishDetail extends Component {
   state = { favorites: [] };
-  markfavorite = (dishID) => {
+  markFavorite = (dishID) => {
     this.setState({ favorites: this.state.favorites.concat(dishID) });
   };
   render() {
-    const { dishID } = this.props.route.params;
+    const { dishId } = this.props.route.params;
     return (
       <ScrollView>
         <RenderDish
           dish={this.props.dishes.dishes[+dishId]}
-          favorite={this.state.favorites.some((el) => el === dishID)}
-          onPress={() => this.markfavorite(dishID)}
+          favorite={this.state.favorites.some((el) => el === dishId)}
+          onPress={() => this.markFavorite(dishId)}
         />
         <RenderComments
           comments={this.props.comments.comments.filter(
-            (comment) => dishID === comment.dishId
+            (comment) => comment.dishId === dishId
           )}
         />
       </ScrollView>

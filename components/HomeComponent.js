@@ -8,9 +8,8 @@ import { baseUrl } from "../shared/baseUrl";
 
 const mapStateToProps = (state) => {
   return {
-    dishes: state.dishes,
-    comments: state.comments,
     promotions: state.promotions,
+    dishes: state.dishes,
     leaders: state.leaders,
   };
 };
@@ -19,53 +18,61 @@ const RenderItem = (props) => {
   const item = props.item;
   console.log(JSON.stringify(item.name) + "from render item");
 
-  if (item.isLoading) return <View />;
-  if (props.errMss) return <View />;
-  else
-    return (
-      <Card
-        featuredTitle={JSON.stringify(item.name)}
-        featuredSubtitle={JSON.stringify(item.designation)}
-        image={{ uri: baseUrl + item.image }}
-      >
-        <Text style={{ margin: 10 }}>{item.description}</Text>
-      </Card>
-    );
+  return (
+    <Card
+      featuredTitle={JSON.stringify(item.name)}
+      featuredSubtitle={JSON.stringify(item.designation)}
+      image={{ uri: baseUrl + item.image }}
+    >
+      <Text style={{ margin: 10 }}>{item.description}</Text>
+    </Card>
+  );
 };
 
 class SubHome extends Component {
+  componentDidMount() {
+    console.log("from component did mount ");
+  }
   render() {
-    return (
-      <ScrollView>
-        <RenderItem
-          item={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
-          isLoading={this.props.dishes.isLoading}
-          erreMess={this.props.dishes.erreMess}
-        />
-        <RenderItem
-          item={
-            this.props.promotions.promotions.filter(
-              (promo) => promo.featured
-            )[0]
-          }
-          isLoading={this.props.promotions.isLoading}
-          erreMess={this.props.promotions.erreMess}
-        />
-        <RenderItem
-          item={
-            this.props.leaders.leaders.filter((leader) => leader.featured)[0]
-          }
-          isLoading={this.props.leaders.isLoading}
-          erreMess={this.props.leaders.erreMess}
-        />
-      </ScrollView>
-    );
+    console.log(JSON.stringify(this.props.data) + "from sub home");
+
+    if (
+      this.props.data.dishes.isLoading ||
+      this.props.data.promotions.isLoading ||
+      this.props.data.leaders.isLoading
+    )
+      return <View />;
+    else
+      return (
+        <ScrollView>
+          <RenderItem
+            item={
+              this.props.data.dishes.dishes.filter((dish) => dish.featured)[0]
+            }
+          />
+          <RenderItem
+            item={
+              this.props.data.promotions.promotions.filter(
+                (promo) => promo.featured
+              )[0]
+            }
+          />
+          <RenderItem
+            item={
+              this.props.data.leaders.leaders.filter(
+                (leader) => leader.featured
+              )[0]
+            }
+          />
+        </ScrollView>
+      );
   }
 }
 
 class Home extends Component {
   state = {};
   render() {
+    console.log("from home component", this.props);
     const Stack = createStackNavigator();
 
     return (
@@ -90,4 +97,4 @@ class Home extends Component {
   }
 }
 
-export default connect(mapStateToProps)(SubHome);
+export default connect(mapStateToProps)(Home);

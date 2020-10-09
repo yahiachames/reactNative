@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
+import { Loading } from './LoadingComponent';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,9 +17,15 @@ const mapStateToProps = (state) => {
 
 const RenderItem = (props) => {
   const item = props.item;
-  console.log(JSON.stringify(item.name) + "from render item");
-
-  return (
+  
+if (props.isLoading === true) return <Loading/>
+else if (props.errMess) {
+  return(
+      <View> 
+          <Text>{props.errMess}</Text>
+      </View>
+  ); }
+  else return (
     <Card
       featuredTitle={JSON.stringify(item.name)}
       featuredSubtitle={JSON.stringify(item.designation)}
@@ -35,20 +42,15 @@ class SubHome extends Component {
   }
   render() {
     console.log(JSON.stringify(this.props.data) + "from sub home");
-
-    if (
-      this.props.data.dishes.isLoading ||
-      this.props.data.promotions.isLoading ||
-      this.props.data.leaders.isLoading
-    )
-      return <View />;
-    else
+  
       return (
         <ScrollView>
           <RenderItem
             item={
               this.props.data.dishes.dishes.filter((dish) => dish.featured)[0]
             }
+            isLoading = { this.props.data.dishes.isLoading}
+            errMess={this.props.data.dishes.errMess}
           />
           <RenderItem
             item={
@@ -56,6 +58,8 @@ class SubHome extends Component {
                 (promo) => promo.featured
               )[0]
             }
+            isLoading = { this.props.data.promotions.isLoading}
+            errMess={this.props.data.promotions.errMess}
           />
           <RenderItem
             item={
@@ -63,6 +67,8 @@ class SubHome extends Component {
                 (leader) => leader.featured
               )[0]
             }
+            isLoading = { this.props.data.leaders.isLoading}
+            errMess={this.props.data.leaders.errMess}
           />
         </ScrollView>
       );

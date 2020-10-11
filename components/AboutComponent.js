@@ -76,9 +76,7 @@ const AboutUs = (props) => {
   return (
     <Stack.Navigator
       initialRouteName='Home'
-      screenOptions={{
-        headerStyle: { backgroundColor: "#BAE2EE" },
-      }}
+      
     >
       <Stack.Screen
         name='About Us'
@@ -87,7 +85,7 @@ const AboutUs = (props) => {
             <Icon
               name='menu'
               size={24}
-              color='#145F74'
+              color='#4f6cd2'
               onPress={() => navigation.toggleDrawer()}
             />
           ),

@@ -155,11 +155,17 @@ export const addLeaders = (leaders) => ({
   payload: leaders,
 });
 
-export const executeAllFetches = () => (dispatch) => {
-  return Promise.all([
-    dispatch(fetchPromos),
-    dispatch(fetchDishes),
-    dispatch(fetchComments),
-    dispatch(fetchLeaders),
-  ]);
+
+
+export const postFavorite = (dishId)  => (dispatch) => {
+
+  setTimeout(() => {
+      dispatch(addFavorite(dishId));
+  }, 2000);
 };
+
+
+export const addFavorite = (dishId) => ({
+  type: ActionTypes.ADD_FAVORITE,
+  payload: dishId
+});

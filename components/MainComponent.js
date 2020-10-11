@@ -3,6 +3,7 @@ import Menu from "./MenuComponent";
 import DishDetail from "./dishDetailComponent";
 import Home from "./HomeComponent";
 import ContactUs from "./ContactComponent";
+import Reservation from './ReservationComponent'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -72,7 +73,7 @@ const SubMenu = (props) => {
             <Icon
               name='menu'
               size={24}
-              color='#145F74'
+              color='#4f6cd2'
               onPress={() => navigation.toggleDrawer()}
             />
           ),
@@ -95,7 +96,7 @@ class MainNavigator extends Component {
         <Drawer.Navigator
           initialRouteName='Home'
           overlayColor='transparent'
-          drawerStyle={{ backgroundColor: "#BAE2EE" }}
+          drawerStyle={{ backgroundColor: "#f9ffc8" }}
           drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
         >
           <Drawer.Screen
@@ -103,7 +104,7 @@ class MainNavigator extends Component {
             component={Home}
             options={{
               drawerIcon: () => (
-                <Icon name='home' type='font-awesome' color='#145F74' />
+                <Icon name='home' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />
@@ -113,7 +114,7 @@ class MainNavigator extends Component {
             component={AboutUs}
             options={{
               drawerIcon: () => (
-                <Icon name='info-circle' type='font-awesome' color='#145F74' />
+                <Icon name='info-circle' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />
@@ -123,7 +124,7 @@ class MainNavigator extends Component {
             component={SubMenu}
             options={{
               drawerIcon: () => (
-                <Icon name='list' type='font-awesome' color='#145F74' />
+                <Icon name='list' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />
@@ -132,11 +133,21 @@ class MainNavigator extends Component {
             component={ContactUs}
             options={{
               drawerIcon: () => (
-                <Icon name='address-card' type='font-awesome' color='#145F74' />
+                <Icon name='address-card' type='font-awesome' color='#4f6cd2' />
+              ),
+            }}
+          />
+            <Drawer.Screen
+            name='Resrvation'
+            component={Reservation}
+            options={{
+              drawerIcon: () => (
+                <Icon name='cutlery' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />
         </Drawer.Navigator>
+        
       </NavigationContainer>
     );
   }
@@ -164,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   drawerHeader: {
-    backgroundColor: "#3A7A8D",
+    backgroundColor: "#ffed3e",
     height: 120,
     alignItems: "center",
     justifyContent: "center",
@@ -172,7 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   drawerHeaderText: {
-    color: "white",
+    color: "black",
     fontSize: 24,
     fontWeight: "bold",
   },

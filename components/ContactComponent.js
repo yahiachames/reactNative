@@ -28,7 +28,7 @@ const ContactUs = () => {
             <Icon
               name='menu'
               size={24}
-              color='#145F74'
+              color='#4f6cd2'
               onPress={() => navigation.toggleDrawer()}
             />
           ),

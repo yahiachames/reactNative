@@ -15,14 +15,11 @@ export const comments = (
       return { ...state, errMess: action.payload, comments: [] };
 
     case ActionTypes.ADD_COMMENT:
-      var lastComment = state.comments[state.comments.length - 1];
-      var newComment = action.payload;
-      newComment.id = lastComment.id + 1;
-      return {
-        ...state,
-        errMess: null,
-        comments: state.comments.concat(newComment),
-      };
+      var newComment = {...action.payload,id:state.comments.length}
+   console.log(action.payload + ' from comment reducer ')
+     const newState =  {...state,comments:[...state.comments , newComment]}
+     console.log(newState + ' from comment reducer new state ')
+return newState
 
     default:
       return state;

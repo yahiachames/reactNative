@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { View, Text, ScrollView  ,StyleSheet , Picker , Switch,Button , Modal } from "react-native";
 
 import { Card, Icon } from "react-native-elements";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import DatePicker from 'react-native-datepicker'
 
@@ -10,7 +11,24 @@ class SubReservation extends Component {
     state = {  guests: 1,
         smoking: false,
         date: "",
-        showModal: false }
+        showModal: false,
+    isDatePickerVisible : false }
+   
+
+    showDataPickerModal= () =>{
+        this.setState({isDatePickerVisible:true})
+    }
+    hideDataPickerModal = () =>{
+        this.setState({isDatePickerVisible:false})
+    }
+    handleConfirm= (date) =>{
+        console.log('date has been picked' , date)
+       let stringDate = date + ''
+     
+        this.setState({date : stringDate  }) 
+       
+       
+    }
 
         handleReservation() {
             console.log(JSON.stringify(this.state));
@@ -57,29 +75,23 @@ class SubReservation extends Component {
                 </View>
                 <View style={styles.formRow}>
                 <Text style={styles.formLabel}>Date and Time</Text>
-                <DatePicker
-                    style={{flex: 2, marginRight: 20}}
-                    date={this.state.date}
-                    format=''
-                    mode="datetime"
-                    placeholder="select date and Time"
-                    minDate="2017-01-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    customStyles={{
-                    dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                    },
-                    dateInput: {
-                        marginLeft: 36
-                    }
-                    // ... You can check the source to find the other keys. 
-                    }}
-                    onDateChange={(date) => {this.setState({date: date})}}
-                />
+                <Icon
+          raised
+          reverse
+          name={"calendar"}
+          color='orange'
+          type='font-awesome'
+          onPress={() => this.showDataPickerModal()
+           
+          }
+          
+        />
+              <DateTimePickerModal
+                isVisible={this.state.isDatePickerVisible}
+                mode="datetime"
+                onConfirm={this.handleConfirm}
+                onCancel={this.hideDataPickerModal}
+              />
                 
                 </View>
                 <View style={styles.formRow}>

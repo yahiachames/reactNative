@@ -26,7 +26,7 @@ const renderLeaderItem = ({ item, index }) => {
 
 class SubAboutUs extends Component {
   render() {
-    console.log(this.props.data);
+    
     if (this.props.data.leaders.isLoading )
       return (
         <ScrollView>

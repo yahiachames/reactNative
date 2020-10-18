@@ -4,6 +4,7 @@ import DishDetail from "./dishDetailComponent";
 import Home from "./HomeComponent";
 import ContactUs from "./ContactComponent";
 import Reservation from './ReservationComponent'
+import Favorites from './FavoriteComponent'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -63,6 +64,29 @@ const CustomDrawerContentComponent = (props) => {
   );
 };
 
+const SubFavorites = (props) => {
+  return (
+    <Stack.Navigator initialRouteName='Favorites'>
+      <Stack.Screen
+        name='Favorites'
+        options={({ navigation }) => ({
+          headerLeft: (props) => (
+            <Icon
+              name='menu'
+              size={24}
+              color='#4f6cd2'
+              onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+        })}
+      >
+        {(props) => <Favorites {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name='DishDetail' component={DishDetail} />
+    </Stack.Navigator>
+  );
+};
+
 const SubMenu = (props) => {
   return (
     <Stack.Navigator initialRouteName='Menu'>
@@ -88,7 +112,7 @@ const SubMenu = (props) => {
 
 class MainNavigator extends Component {
   render() {
-    console.log("start rendering");
+   
     const Drawer = createDrawerNavigator();
 
     return (
@@ -143,6 +167,15 @@ class MainNavigator extends Component {
             options={{
               drawerIcon: () => (
                 <Icon name='cutlery' type='font-awesome' color='#4f6cd2' />
+              ),
+            }}
+          />
+             <Drawer.Screen
+            name='Favorites'
+            component={SubFavorites}
+            options={{
+              drawerIcon: () => (
+                <Icon name='heart' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />

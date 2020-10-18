@@ -169,3 +169,23 @@ export const addFavorite = (dishId) => ({
   type: ActionTypes.ADD_FAVORITE,
   payload: dishId
 });
+
+export const postComment = (data) => (dispatch) => {
+  const date = new Date()
+const fullData = {...data,date}
+console.log(JSON.stringify(fullData) + 'from postComment')
+setTimeout(() => {
+  dispatch(addComment(fullData));
+}, 2000);
+}
+
+export const deleteFavorite = (dishId) => ({
+  type : ActionTypes.DELETE_FAVORITE,
+  payload: dishId
+})
+
+export const addComment = (data) => ({
+  type : ActionTypes.ADD_COMMENT,
+  payload : data
+  
+})

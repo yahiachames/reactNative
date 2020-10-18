@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React, { Component , useState  } from "react";
+import {useDispatch} from 'react-redux'
 import { Card, Icon } from "react-native-elements";
-import { View, Text, ScrollView, FlatList } from "react-native";
+import { View, Text, ScrollView, FlatList , StyleSheet ,Modal , Button } from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
-import { postFavorite } from '../redux/ActionCreators';
+import { postComment, postFavorite } from '../redux/ActionCreators';
+import {  AirbnbRating  , Input} from 'react-native-elements';
+
 
 const mapStateToProps = state => {
   return {
@@ -14,15 +17,45 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  postFavorite: (dishId) => dispatch(postFavorite(dishId))
+  postFavorite: (dishId) => dispatch(postFavorite(dishId)),
+
 })
 
 const RenderDish = (props) => {
+  
+  const dispatch = useDispatch()
+  const [showModal,setShowModal] = useState(false)
+  const [rating , setRating] = useState(0)
+  const [author , setAuthor] = useState("")
+  const [comment , setComment] = useState("")
+
+const handleComment= () => {
+dispatch(postComment({
+  author,
+  comment,
+  rating,
+ dishId: props.dish.id
+}))
+}
+
+const resetForm = () => {
+  setAuthor("")
+  setComment("")
+  setRating(0)
+}
+  const toggleModal = () => {
+    setShowModal( !showModal);
+  }
+
+  const ratingCompleted  = (rating)  => {
+    setRating(rating)
+  }
   const dish = props.dish;
   if (dish != null)
     return (
       <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
         <Text style={{ margin: 10 }}> {dish.description} </Text>
+        <View  style={styles.iconContainer} > 
         <Icon
           raised
           reverse
@@ -33,6 +66,60 @@ const RenderDish = (props) => {
             props.favorite ? console.log("already favorite") : props.onPress()
           }
         />
+         <Icon
+          raised
+          reverse
+          name={"pencil"}
+          color='#512DA8'
+          type='font-awesome'
+          onPress={() => toggleModal()
+           
+          }
+          
+        />
+        </View>
+        <Modal  visible={showModal}   
+        onDismiss = {() => toggleModal() }
+        onRequestClose = {() => toggleModal() }
+        >
+        <View style = {styles.modal}>
+        <AirbnbRating
+    onFinishRating={() => ratingCompleted()}
+    
+   /> 
+   <View style={styles.inputContainer} >
+   <Input
+   placeholder="Author"
+   leftIcon={{ type: 'font-awesome', name: 'user' }}
+   
+   onChangeText={value => setAuthor(value)}
+  />
+     <Input
+   placeholder="comment"
+   leftIcon={{ type: 'font-awesome', name: 'comment' }}
+   
+   onChangeText={value => setComment(value)}
+  />
+   </View>
+   <View  style={styles.btnContainer} ><Button 
+                          
+                          color="#512DA8"
+                          title="submit" 
+                          onPress={() => { handleComment();toggleModal() ; }
+           
+                          }
+                          /></View>
+  
+  <View  style={styles.btnContainer} ><Button 
+                         onPress={() => {resetForm();toggleModal()}
+           
+                         } 
+                          color="grey"
+                          title="cancel" 
+                          /></View></View>
+       
+        </Modal>
+   
       </Card>
     );
   else {
@@ -46,7 +133,9 @@ const RenderComments = (props) => {
     return (
       <Card style={{ margin: 10 }} key={index}>
         <Text style={{ fontSize: 14 }}>{item.comment}</Text>
-        <Text style={{ fontSize: 12 }}>{item.rating + " Stars"}</Text>
+        <AirbnbRating
+    defaultRating={item.rating}
+   /> 
         <Text style={{ fontSize: 12 }}>
           {"-- " + item.author + ", " + item.date}
         </Text>
@@ -90,5 +179,27 @@ class DishDetail extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  iconContainer : {
+    alignItems:"center",
+    justifyContent:"center",
+    flex : 1,
+    flexDirection:"row"
+    
+  },
+  modal: {
+    justifyContent: 'center',
+    margin: 20
+ },
+ inputContainer : {
+   margin:20,
+   justifyContent:'center',
+   alignItems:'center'
+ },
+ btnContainer : {
+   margin:10
+ }
+})
 
 export default connect(mapStateToProps,mapDispatchToProps)(DishDetail);

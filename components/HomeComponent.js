@@ -37,11 +37,9 @@ else if (props.errMess) {
 };
 
 class SubHome extends Component {
-  componentDidMount() {
-    console.log("from component did mount ");
-  }
+
   render() {
-    console.log(JSON.stringify(this.props.data) + "from sub home");
+   
   
       return (
         <ScrollView>

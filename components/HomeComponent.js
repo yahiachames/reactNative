@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView , Animated,Easing } from "react-native";
 import { Card, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -37,19 +37,51 @@ else if (props.errMess) {
 };
 
 class SubHome extends Component {
+  constructor(props,context){
+    super(props)
+    this.animatedValue = new Animated.Value(0);
+  }
+  componentDidMount () {
+    // this.animate()
+}
+animate () {
+  this.animatedValue.setValue(0)
+  Animated.timing(
+    this.animatedValue,
+    {
+      toValue: 8,
+      duration: 10000,
+      easing: Easing.linear
+    }
+  ).start(() => this.animate())
+}
 
   render() {
-   
+    const xpos1 = this.animatedValue.interpolate({
+      inputRange: [0, 1, 3, 5, 8],
+      outputRange: [1200, 600, 0, -600, -1200]
+  })
+  const xpos2 = this.animatedValue.interpolate({
+      inputRange: [0, 1.5, 3.5, 5.5, 8],
+      outputRange: [1200, 600, 0, -600, -1200]
+  })
+  const xpos3 = this.animatedValue.interpolate({
+      inputRange: [0, 2.5, 4.5, 6.5, 8],
+      outputRange: [1200, 600, 0, -600, -1200 ]
+  })
   
       return (
         <ScrollView>
-          <RenderItem
+          {/* <Animated.View style={{ width: '100%', transform: [{translateY: xpos1}]}}  > */}
+            <RenderItem
             item={
               this.props.data.dishes.dishes.filter((dish) => dish.featured)[0]
             }
             isLoading = { this.props.data.dishes.isLoading}
             errMess={this.props.data.dishes.errMess}
           />
+          {/* </Animated.View> */}
+          {/* <Animated.View style={{ width: '100%',  transform: [{translateY: xpos2}]}}> */}
           <RenderItem
             item={
               this.props.data.promotions.promotions.filter(
@@ -59,6 +91,8 @@ class SubHome extends Component {
             isLoading = { this.props.data.promotions.isLoading}
             errMess={this.props.data.promotions.errMess}
           />
+          {/* </Animated.View> */}
+          {/* <Animated.View style={{ width: '100%',  transform: [{translateY: xpos3}]}}> */}
           <RenderItem
             item={
               this.props.data.leaders.leaders.filter(
@@ -68,6 +102,8 @@ class SubHome extends Component {
             isLoading = { this.props.data.leaders.isLoading}
             errMess={this.props.data.leaders.errMess}
           />
+          {/* </Animated.View> */}
+         
         </ScrollView>
       );
   }

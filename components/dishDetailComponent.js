@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { postComment, postFavorite } from '../redux/ActionCreators';
 import {  AirbnbRating  , Input} from 'react-native-elements';
-
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
   return {
@@ -53,6 +53,7 @@ const resetForm = () => {
   const dish = props.dish;
   if (dish != null)
     return (
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
       <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
         <Text style={{ margin: 10 }}> {dish.description} </Text>
         <View  style={styles.iconContainer} > 
@@ -121,6 +122,7 @@ const resetForm = () => {
         </Modal>
    
       </Card>
+      </Animatable.View>
     );
   else {
     return <View />;
@@ -131,6 +133,7 @@ const RenderComments = (props) => {
   const comments = props.comments;
   const renderItemComments = ({ item, index }) => {
     return (
+      <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
       <Card style={{ margin: 10 }} key={index}>
         <Text style={{ fontSize: 14 }}>{item.comment}</Text>
         <AirbnbRating
@@ -140,11 +143,13 @@ const RenderComments = (props) => {
           {"-- " + item.author + ", " + item.date}
         </Text>
       </Card>
+      </Animatable.View>
     );
   };
   if (!comments) return <View />;
   else
     return (
+      <Animatable.View animation="fadeInUp" duration={2000} delay={1000}> 
       <Card>
         <FlatList
           data={comments}
@@ -152,6 +157,7 @@ const RenderComments = (props) => {
           keyExtractor={(item) => item.id.toString()}
         />
       </Card>
+      </Animatable.View>
     );
 };
 

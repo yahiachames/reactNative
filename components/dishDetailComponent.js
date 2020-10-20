@@ -1,7 +1,7 @@
-import React, { Component , useState  } from "react";
+import React, { Component , useState , useRef  } from "react";
 import {useDispatch} from 'react-redux'
 import { Card, Icon } from "react-native-elements";
-import { View, Text, ScrollView, FlatList , StyleSheet ,Modal , Button } from "react-native";
+import { View, Text, ScrollView, FlatList , StyleSheet ,Modal , Button , Alert , PanResponder } from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { postComment, postFavorite } from '../redux/ActionCreators';
@@ -28,6 +28,36 @@ const RenderDish = (props) => {
   const [rating , setRating] = useState(0)
   const [author , setAuthor] = useState("")
   const [comment , setComment] = useState("")
+  handleViewRef = ref => this.view = ref;
+
+  const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+    if ( dx < -200 )
+        return true;
+    else
+        return false;
+}
+
+const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: (e, gestureState) => {
+        return true;
+    },
+    onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
+    onPanResponderEnd: (e, gestureState) => {
+        console.log("pan responder end", gestureState);
+        if (recognizeDrag(gestureState))
+            Alert.alert(
+                'Add Favorite',
+                'Are you sure you wish to add ' + dish.name + ' to favorite?',
+                [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => {props.favorite ? console.log('Already favorite') : props.onPress()}},
+                ],
+                { cancelable: false }
+            );
+
+        return true;
+    }
+})
 
 const handleComment= () => {
 dispatch(postComment({
@@ -53,7 +83,9 @@ const resetForm = () => {
   const dish = props.dish;
   if (dish != null)
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000} 
+      ref={this.handleViewRef}
+      {...panResponder.panHandlers}  >
       <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
         <Text style={{ margin: 10 }}> {dish.description} </Text>
         <View  style={styles.iconContainer} > 

@@ -28,11 +28,21 @@ const RenderDish = (props) => {
   const [rating , setRating] = useState(0)
   const [author , setAuthor] = useState("")
   const [comment , setComment] = useState("")
+  
   handleViewRef = ref => this.view = ref;
+
+  const recognizeComment= ({ moveX, moveY, dx, dy }) => {
+    if ( dx > -200 )
+        return true;
+        
+    else
+        return false;
+}
 
   const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
     if ( dx < -200 )
         return true;
+        
     else
         return false;
 }
@@ -44,7 +54,7 @@ const panResponder = PanResponder.create({
     onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
     onPanResponderEnd: (e, gestureState) => {
         console.log("pan responder end", gestureState);
-        if (recognizeDrag(gestureState))
+        if (recognizeDrag(gestureState)){
             Alert.alert(
                 'Add Favorite',
                 'Are you sure you wish to add ' + dish.name + ' to favorite?',
@@ -55,7 +65,12 @@ const panResponder = PanResponder.create({
                 { cancelable: false }
             );
 
-        return true;
+        return true}
+       if(recognizeComment(gestureState)) {
+         console.log('left to right i worked')
+           toggleModal()
+           return true
+         }
     }
 })
 

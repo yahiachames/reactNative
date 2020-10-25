@@ -1,7 +1,7 @@
 import React, { Component , useState , useRef  } from "react";
 import {useDispatch} from 'react-redux'
 import { Card, Icon } from "react-native-elements";
-import { View, Text, ScrollView, FlatList , StyleSheet ,Modal , Button , Alert , PanResponder } from "react-native";
+import { View, Text, ScrollView, FlatList , StyleSheet ,Modal , Button , Alert , PanResponder  , Share} from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { postComment, postFavorite } from '../redux/ActionCreators';
@@ -95,6 +95,17 @@ const resetForm = () => {
   const ratingCompleted  = (rating)  => {
     setRating(rating)
   }
+
+  const shareDish = (title, message, url) => {
+    Share.share({
+        title: title,
+        message: title + ': ' + message + ' ' + url,
+        url: url
+    },{
+        dialogTitle: 'Share ' + title
+    })
+}
+
   const dish = props.dish;
   if (dish != null)
     return (
@@ -125,6 +136,14 @@ const resetForm = () => {
           }
           
         />
+         <Icon
+                            raised
+                            reverse
+                            name='share'
+                            type='font-awesome'
+                            color='#51D2A8'
+                            
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)} />
         </View>
         <Modal  visible={showModal}   
         onDismiss = {() => toggleModal() }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text,Share } from "react-native";
 import { Card, Icon,Button } from "react-native-elements";
 
 import { createStackNavigator } from "@react-navigation/stack";

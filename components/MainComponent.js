@@ -5,7 +5,7 @@ import Home from "./HomeComponent";
 import ContactUs from "./ContactComponent";
 import Reservation from './ReservationComponent'
 import Favorites from './FavoriteComponent'
-import Login from './LoginComponent'
+import User from './LoginComponent'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -125,11 +125,11 @@ class MainNavigator extends Component {
           drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
         >
              <Drawer.Screen
-            name='Login'
-            component={Login}
+            name='User'
+            component={User}
             options={{
               drawerIcon: () => (
-                <Icon name='sign-in' type='font-awesome' color='#4f6cd2' />
+                <Icon name='user' type='font-awesome' color='#4f6cd2' />
               ),
             }}
           />
